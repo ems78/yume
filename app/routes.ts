@@ -1,8 +1,9 @@
 import express from 'express';
+import { getLogs } from './controllers/dreamLogController';
 
-const controller = require('./controller')
 const router = express.Router();
 
-router.get('/', controller.getHome);
+// router.get('/', controller.getHome);
+router.get('/logs', getLogs);
 
 export default router;

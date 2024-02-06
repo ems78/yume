@@ -1,16 +1,15 @@
-import { ObjectId } from 'mongodb';
+import mongoose, { Schema } from 'mongoose';
+import { Tag, DreamLog } from './interfaces';
 
-interface Tag {
-    _id: ObjectId;
-    name: string;
-}
+export const tagSchema = new Schema<Tag>({
+    name: { type: String, required: true }
+});
 
-interface DreamLog {
-    _id: ObjectId;
-    date: Date;
-    title: string;
-    content: string;
-    tags: Tag[];
-}
+export const dreamLogSchema = new Schema<DreamLog>({
+    date: { type: Date, required: true },
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }]
+});
 
-export { Tag, DreamLog };
+export default mongoose.model<DreamLog>('DreamLog', dreamLogSchema);
