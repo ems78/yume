@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import { Tag, DreamLog } from './interfaces';
 
 mongoose.connect(process.env.MONGODB_URI || '');

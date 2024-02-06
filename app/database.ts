@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion, Db } from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 import { config } from "dotenv";
 
 config(); 
