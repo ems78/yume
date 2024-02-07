@@ -5,10 +5,10 @@ const server = app.listen(port, () => {
   console.log(`Server listening on port ${port}!`);
 });
 
-process.on('SIGINT', async () => {
-  console.log('Closing server...');
+process.on("SIGINT", async () => {
+  console.log("Closing server...");
   server.close(() => {
-      console.log('Server closed');
-      process.exit(0);
+    console.log("Server closed");
+    process.exit(0);
   });
 });

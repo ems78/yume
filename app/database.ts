@@ -1,24 +1,24 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { config } from "dotenv";
 
-config(); 
+config();
 
-const uri: string = process.env.MONGODB_URI || ''; 
+const uri: string = process.env.MONGODB_URI || "";
 
 let cachedClient: MongoClient;
 
 export const createMongoClient = async (): Promise<MongoClient> => {
-    if (!cachedClient) {
-        cachedClient = new MongoClient(uri, {
-            serverApi: {
-                version: ServerApiVersion.v1,
-                strict: true,
-                deprecationErrors: true,
-            },
-        });
+  if (!cachedClient) {
+    cachedClient = new MongoClient(uri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+    });
 
-        await cachedClient.connect(); 
-    }
+    await cachedClient.connect();
+  }
 
-    return cachedClient;
+  return cachedClient;
 };

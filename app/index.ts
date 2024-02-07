@@ -1,8 +1,8 @@
-import express, { Application } from 'express';
-import cors from 'cors';
-import routes from './routes';
-import { createMongoClient } from './database';
-import { addCollectionToRequest } from './middleware/addCollectionToRequest';
+import express, { Application } from "express";
+import cors from "cors";
+import routes from "./routes";
+import { createMongoClient } from "./database";
+import { addCollectionToRequest } from "./middleware/addCollectionToRequest";
 
 const app: Application = express();
 
@@ -11,16 +11,18 @@ app.use(express.json());
 
 app.use(addCollectionToRequest);
 
-app.use('/api', routes);
+app.use("/api", routes);
 
-app.get('/', (req, res) => { 
-    res.send('Welcome to the dream log API!');
-  });
-
-createMongoClient().then((client) => {
-    console.log('Connected to database.');
-}).catch((err) => {
-    console.error('Error connecting to database: ', err);
+app.get("/", (req, res) => {
+  res.send("Welcome to the dream log API!");
 });
+
+createMongoClient()
+  .then((client) => {
+    console.log("Connected to database.");
+  })
+  .catch((err) => {
+    console.error("Error connecting to database: ", err);
+  });
 
 export default app;
