@@ -2,11 +2,15 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import routes from './routes';
 import { createMongoClient } from './database';
+import { addCollectionToRequest } from './middleware/addCollectionToRequest';
 
 const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(addCollectionToRequest);
+
 app.use('/api', routes);
 
 app.get('/', (req, res) => { 

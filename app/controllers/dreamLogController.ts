@@ -3,13 +3,12 @@ import { createMongoClient } from '../database';
 import { DreamLog } from '../interfaces';
 import { validationResult } from 'express-validator';
 import { ObjectId } from 'mongodb';
+import { addCollectionToRequest } from '../middleware/addCollectionToRequest';
 
 export const getLogs = async (req: Request, res: Response) => {
     try {
-        const client = await createMongoClient();
-        const db = client.db();
-
-        const dreamLogsCollection = db.collection<DreamLog>('dreamLogs'); 
+        await addCollectionToRequest(req, res, () => {});
+        const dreamLogsCollection = (req as any).collections.dreamLogs;
         const dreamLogs = await dreamLogsCollection.find({}).toArray();
 
         if (dreamLogs.length === 0) {
@@ -30,10 +29,8 @@ export const getLogById = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Invalid ID format' });
         }
 
-        const client = await createMongoClient();
-        const db = client.db();
-
-        const dreamLogsCollection = db.collection<DreamLog>('dreamLogs');
+        await addCollectionToRequest(req, res, () => {});
+        const dreamLogsCollection = (req as any).collections.dreamLogs;
         const dreamLog = await dreamLogsCollection.findOne({ _id: new ObjectId(id) });
 
         if (!dreamLog) {
@@ -49,15 +46,13 @@ export const getLogById = async (req: Request, res: Response) => {
 
 export const addLog = async (req: Request, res: Response) => {
     try {
-        const client = await createMongoClient();
-        const db = client.db();
-
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const dreamLogsCollection = db.collection<DreamLog>('dreamLogs');
+        await addCollectionToRequest(req, res, () => {});
+        const dreamLogsCollection = (req as any).collections.dreamLogs;
         const dreamLog = await dreamLogsCollection.insertOne(req.body);
 
         res.status(201).json(dreamLog);
@@ -74,15 +69,13 @@ export const editLog = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Invalid ID format' });
         }
 
-        const client = await createMongoClient();
-        const db = client.db();
-
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const dreamLogsCollection = db.collection<DreamLog>('dreamLogs');
+        await addCollectionToRequest(req, res, () => {});
+        const dreamLogsCollection = (req as any).collections.dreamLogs;
         const result = await dreamLogsCollection.updateOne(
             { _id: new ObjectId(id) },
             { $set: req.body }
@@ -102,10 +95,8 @@ export const deleteLog = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Invalid ID format' });
         }
 
-        const client = await createMongoClient();
-        const db = client.db();
-
-        const dreamLogsCollection = db.collection<DreamLog>('dreamLogs');
+        await addCollectionToRequest(req, res, () => {});
+        const dreamLogsCollection = (req as any).collections.dreamLogs;
         const result = await dreamLogsCollection.deleteOne({ _id: new ObjectId(id) });
 
         if (result.deletedCount === 0) {
