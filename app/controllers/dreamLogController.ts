@@ -12,7 +12,11 @@ export const getLogs = async (req: Request, res: Response) => {
         const dreamLogsCollection = db.collection<DreamLog>('dreamLogs'); 
         const dreamLogs = await dreamLogsCollection.find({}).toArray();
 
-        res.json(dreamLogs);
+        if (dreamLogs.length === 0) {
+            return res.status(404).json({ message: 'No logs found' });
+        }
+
+        res.status(200).json(dreamLogs);
     } catch (error) {
         console.error('Error fetching dream logs: ', error);
         res.status(500).json({ message: 'Error fetching logs' });
@@ -54,9 +58,9 @@ export const addLog = async (req: Request, res: Response) => {
         }
 
         const dreamLogsCollection = db.collection<DreamLog>('dreamLogs');
-        const result = await dreamLogsCollection.insertOne(req.body);
+        const dreamLog = await dreamLogsCollection.insertOne(req.body);
 
-        res.status(201).json(result);
+        res.status(201).json(dreamLog);
     } catch (error) {
         console.error('Error adding dream log: ', error);
         res.status(500).json({ message: 'Server error' });

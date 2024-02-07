@@ -4,7 +4,7 @@ import { Tag, DreamLog } from './interfaces';
 mongoose.connect(process.env.MONGODB_URI || '');
 
 const tagSchema = new mongoose.Schema<Tag>({
-    name: { type: String, required: true }
+    name: { type: String, required: true, unique: true }
 });
 
 const dreamLogSchema = new mongoose.Schema<DreamLog>({
