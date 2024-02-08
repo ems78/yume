@@ -46,6 +46,14 @@ export const userValidationRules = () => {
   ];
 };
 
+export const loginValidationRules = () => {
+  return [
+    body("email").notEmpty().withMessage("Email is required"),
+    body("email").isEmail().withMessage("Invalid email format"),
+    body("password").notEmpty().withMessage("Password is required"),
+  ];
+}
+
 export const tagValidationRules = () => {
   return [
     body("name").notEmpty().withMessage("Name is required"),

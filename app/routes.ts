@@ -13,11 +13,12 @@ import {
   editTag,
   deleteTag,
 } from "./controllers/tagController";
-import { registerUser } from "./controllers/userController";
+import { registerUser, login } from "./controllers/userController";
 import {
   handleValidationResult,
   validateId,
   userValidationRules,
+  loginValidationRules,
   tagValidationRules,
   dreamLogValidationRules,
 } from "./middleware/validate";
@@ -42,5 +43,6 @@ router.post(
   handleValidationResult,
   registerUser
 );
+router.post("/login", loginValidationRules(), handleValidationResult, login);
 
 export default router;

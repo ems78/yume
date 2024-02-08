@@ -1,15 +1,36 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { config } from "dotenv";
+import { User } from "../interfaces";
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    const { email, password } = req.body;
+    const userCollection = (req as any).collections.users;
+    const user: User = await findUserByEmail(email, userCollection);
+
+    if (!user) {
+      return res.status(401).json({ message: "No account for email" });
     }
 
-    res.status(200).json({ message: "Login successful" });
+    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Wrong password" });
+    }
+
+    config();
+    const secretKey: string = process.env.JWT_SECRET || "SECRET_KEY";
+    const token = jwt.sign(
+      { userId: user._id, userEmail: user.email },
+      secretKey,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Error logging in: ", error);
     res.status(500).json({ message: "Error logging in" });
@@ -25,8 +46,6 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const { username, email, password } = req.body;
     const userCollection = (req as any).collections.users;
-
-    // TODO: validate domain
 
     if (await findUserByEmail(email, userCollection)) {
       return res
