@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { DreamLog } from "../interfaces";
-import { validationResult } from "express-validator";
 import { ObjectId, InsertOneResult } from "mongodb";
 
 export const getLogs = async (req: Request, res: Response) => {

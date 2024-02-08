@@ -4,15 +4,25 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import { User } from "../interfaces";
+import { Collection } from "mongoose";
 
-export const login = async (req: Request, res: Response) => {
+/**
+ * Performs user login.
+ * @param {Request} req The request object containing user credentials in the request body.
+ * @param {Response} res The response object used to send the login result.
+ * @returns {Promise<void | Response<any>>} A promise that resolves with the response sent to the client, or void if no response is sent.
+ */
+export const login = async (
+  req: Request,
+  res: Response
+): Promise<void | Response<any>> => {
   try {
     const { email, password } = req.body;
     const userCollection = (req as any).collections.users;
-    const user: User = await findUserByEmail(email, userCollection);
+    const user: User | null = await findUserByEmail(email, userCollection);
 
     if (!user) {
-      return res.status(401).json({ message: "No account for email" });
+      return res.status(401).json({ message: "Account doesn't exist" });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
@@ -37,7 +47,16 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const registerUser = async (req: Request, res: Response) => {
+/**
+ * Registers a new user.
+ * @param {Request} req The request object containing user registration data in the request body.
+ * @param {Response} res The response object used to send the registration result.
+ * @returns {Promise<void | Response<any>>} A promise that resolves with the response sent to the client, or void if no response is sent.
+ */
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<void | Response<any>> => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -78,7 +97,17 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-const findUserByEmail = async (email: string, userCollection: any) => {
+/**
+ * Finds a user by email in the specified user collection.
+ * @param {string} email The email of the user to find.
+ * @param {Collection<User>} userCollection The collection where the user should be searched for.
+ * @returns {Promise<User | null>} A promise that resolves to the found user, or null if not found.
+ * @throws {Error} If there is an error while finding the user.
+ */
+const findUserByEmail = async (
+  email: string,
+  userCollection: Collection<User>
+): Promise<User | null> => {
   try {
     const user = await userCollection.findOne({ email });
     return user;
@@ -88,7 +117,17 @@ const findUserByEmail = async (email: string, userCollection: any) => {
   }
 };
 
-const findUserByUsername = async (username: string, userCollection: any) => {
+/**
+ * Finds a user by username in the specified user collection.
+ * @param {string} username The username of the user to find.
+ * @param {Collection<User>} userCollection The collection where the user should be searched for.
+ * @returns {Promise<User | null>} A promise that resolves to the found user, or null if not found.
+ * @throws {Error} If there is an error while finding the user.
+ */
+const findUserByUsername = async (
+  username: string,
+  userCollection: Collection<User>
+): Promise<User | null> => {
   try {
     const user = await userCollection.findOne({ username });
     return user;
@@ -98,6 +137,12 @@ const findUserByUsername = async (username: string, userCollection: any) => {
   }
 };
 
+/**
+ * Hashes the given password using bcrypt.
+ * @param {string} password The password to hash.
+ * @returns {Promise<string>} A promise that resolves to the hashed password.
+ * @throws {Error} If there is an error while hashing the password.
+ */
 const hashPassword = async (password: string) => {
   try {
     const saltRounds = 10;

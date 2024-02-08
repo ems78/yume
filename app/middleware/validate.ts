@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { body, param, validationResult } from "express-validator";
 import { ObjectId } from "mongodb";
 
@@ -52,7 +52,7 @@ export const loginValidationRules = () => {
     body("email").isEmail().withMessage("Invalid email format"),
     body("password").notEmpty().withMessage("Password is required"),
   ];
-}
+};
 
 export const tagValidationRules = () => {
   return [

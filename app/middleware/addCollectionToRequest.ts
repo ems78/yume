@@ -9,6 +9,10 @@ interface CollectionMiddleware {
   users: Collection<User>;
 }
 
+/**
+ * Adds collections to the request object for
+ * easy access in subsequent middleware or routes.
+ */
 export const addCollectionToRequest = async (
   req: Request,
   res: Response,

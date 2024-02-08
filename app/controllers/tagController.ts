@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Tag } from "../interfaces";
-import { validationResult } from "express-validator";
 import { ObjectId, InsertOneResult } from "mongodb";
 
 export const getTags = async (req: Request, res: Response) => {
