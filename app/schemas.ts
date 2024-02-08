@@ -25,7 +25,5 @@ const userSchema = new mongoose.Schema({
 });
 
 export const TagModel = mongoose.model<Tag>("Tag", tagSchema);
-export const DreamLogModel = mongoose.model<DreamLog>(
-  "DreamLog",
-  dreamLogSchema
-);
+export const DreamLogModel = mongoose.model<DreamLog>("DreamLog", dreamLogSchema);
+export const UserModel = mongoose.model("User", userSchema);

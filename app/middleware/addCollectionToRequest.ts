@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { createMongoClient } from "../database";
 import { Collection } from "mongodb";
-import { Tag, DreamLog } from "../interfaces";
+import { Tag, DreamLog, User } from "../interfaces";
 
 interface CollectionMiddleware {
   tags: Collection<Tag>;
   dreamLogs: Collection<DreamLog>;
+  users: Collection<User>;
 }
 
 export const addCollectionToRequest = async (
@@ -20,6 +21,7 @@ export const addCollectionToRequest = async (
     const collectionMiddleware: CollectionMiddleware = {
       tags: db.collection<Tag>("tags"),
       dreamLogs: db.collection<DreamLog>("dreamLogs"),
+      users: db.collection<User>("users"),
     };
 
     (req as any).collections = collectionMiddleware;

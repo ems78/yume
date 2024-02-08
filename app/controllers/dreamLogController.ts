@@ -2,11 +2,9 @@ import { Request, Response } from "express";
 import { DreamLog } from "../interfaces";
 import { validationResult } from "express-validator";
 import { ObjectId, InsertOneResult } from "mongodb";
-import { addCollectionToRequest } from "../middleware/addCollectionToRequest";
 
 export const getLogs = async (req: Request, res: Response) => {
   try {
-    await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
     const dreamLogs: DreamLog[] = await dreamLogsCollection.find({}).toArray();
 
@@ -23,15 +21,9 @@ export const getLogs = async (req: Request, res: Response) => {
 
 export const getLogById = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
     const dreamLog: DreamLog = await dreamLogsCollection.findOne({
-      _id: new ObjectId(id),
+      _id: new ObjectId(req.params.id),
     });
 
     if (!dreamLog) {
@@ -47,12 +39,6 @@ export const getLogById = async (req: Request, res: Response) => {
 
 export const addLog = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
     const dreamLog: InsertOneResult<DreamLog> =
       await dreamLogsCollection.insertOne(req.body);
@@ -66,20 +52,9 @@ export const addLog = async (req: Request, res: Response) => {
 
 export const editLog = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
     const result: DreamLog = await dreamLogsCollection.updateOne(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(req.params.id) },
       { $set: req.body },
       { new: true }
     );
@@ -93,15 +68,9 @@ export const editLog = async (req: Request, res: Response) => {
 
 export const deleteLog = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
     const result = await dreamLogsCollection.deleteOne({
-      _id: new ObjectId(id),
+      _id: new ObjectId(req.params.id),
     });
 
     if (!result) {

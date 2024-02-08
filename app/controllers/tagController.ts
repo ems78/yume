@@ -2,11 +2,9 @@ import { Request, Response } from "express";
 import { Tag } from "../interfaces";
 import { validationResult } from "express-validator";
 import { ObjectId, InsertOneResult } from "mongodb";
-import { addCollectionToRequest } from "../middleware/addCollectionToRequest";
 
 export const getTags = async (req: Request, res: Response) => {
   try {
-    await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
     const tags: Tag[] = await tagsCollection.find({}).toArray();
 
@@ -23,14 +21,10 @@ export const getTags = async (req: Request, res: Response) => {
 
 export const getTagById = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
-    const tag: Tag = await tagsCollection.findOne({ _id: new ObjectId(id) });
+    const tag: Tag = await tagsCollection.findOne({
+      _id: new ObjectId(req.params.id),
+    });
 
     if (!tag) {
       return res.status(404).json({ message: "Tag not found" });
@@ -45,12 +39,6 @@ export const getTagById = async (req: Request, res: Response) => {
 
 export const addTag = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
     const tag: InsertOneResult<Tag> = await tagsCollection.insertOne(req.body);
 
@@ -63,15 +51,9 @@ export const addTag = async (req: Request, res: Response) => {
 
 export const editTag = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
     const tag = await tagsCollection.findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(req.params.id) },
       { $set: req.body },
       { new: true }
     );
@@ -89,15 +71,9 @@ export const editTag = async (req: Request, res: Response) => {
 
 export const deleteTag = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
-
-    await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
     const tag: Tag = await tagsCollection.findOneAndDelete({
-      _id: new ObjectId(id),
+      _id: new ObjectId(req.params.id),
     });
 
     if (!tag) {

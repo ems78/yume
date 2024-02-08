@@ -25,4 +25,4 @@ interface User extends Document {
   dreamLogs: Types.ObjectId[];
 }
 
-export { Tag, DreamLog };
+export { Tag, DreamLog, User };
