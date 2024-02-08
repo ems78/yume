@@ -5,6 +5,7 @@ mongoose.connect(process.env.MONGODB_URI || "");
 
 const tagSchema = new mongoose.Schema<Tag>({
   name: { type: String, required: true, unique: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 const dreamLogSchema = new mongoose.Schema<DreamLog>({

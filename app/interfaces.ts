@@ -4,6 +4,7 @@ import { Document, Types } from "mongoose";
 interface Tag extends Document {
   _id: ObjectId;
   name: string;
+  userId: ObjectId;
 }
 
 interface DreamLog extends Document {

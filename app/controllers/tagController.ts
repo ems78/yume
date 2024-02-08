@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
-import { createMongoClient } from "../database";
 import { Tag } from "../interfaces";
 import { validationResult } from "express-validator";
-import { ObjectId } from "mongodb";
+import { ObjectId, InsertOneResult } from "mongodb";
 import { addCollectionToRequest } from "../middleware/addCollectionToRequest";
 
 export const getTags = async (req: Request, res: Response) => {
   try {
     await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
-    const tags = await tagsCollection.find({}).toArray();
+    const tags: Tag[] = await tagsCollection.find({}).toArray();
 
     if (tags.length === 0) {
       return res.status(404).json({ message: "No tags found" });
@@ -31,7 +30,7 @@ export const getTagById = async (req: Request, res: Response) => {
 
     await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
-    const tag = await tagsCollection.findOne({ _id: new ObjectId(id) });
+    const tag: Tag = await tagsCollection.findOne({ _id: new ObjectId(id) });
 
     if (!tag) {
       return res.status(404).json({ message: "Tag not found" });
@@ -53,7 +52,7 @@ export const addTag = async (req: Request, res: Response) => {
 
     await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
-    const tag = await tagsCollection.insertOne(req.body);
+    const tag: InsertOneResult<Tag> = await tagsCollection.insertOne(req.body);
 
     res.status(201).json(tag);
   } catch (error) {
@@ -73,7 +72,8 @@ export const editTag = async (req: Request, res: Response) => {
     const tagsCollection = (req as any).collections.tags;
     const tag = await tagsCollection.findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { $set: req.body }
+      { $set: req.body },
+      { new: true }
     );
 
     if (!tag) {
@@ -96,7 +96,7 @@ export const deleteTag = async (req: Request, res: Response) => {
 
     await addCollectionToRequest(req, res, () => {});
     const tagsCollection = (req as any).collections.tags;
-    const tag = await tagsCollection.findOneAndDelete({
+    const tag: Tag = await tagsCollection.findOneAndDelete({
       _id: new ObjectId(id),
     });
 

@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
-import { createMongoClient } from "../database";
 import { DreamLog } from "../interfaces";
 import { validationResult } from "express-validator";
-import { ObjectId } from "mongodb";
+import { ObjectId, InsertOneResult } from "mongodb";
 import { addCollectionToRequest } from "../middleware/addCollectionToRequest";
 
 export const getLogs = async (req: Request, res: Response) => {
   try {
     await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
-    const dreamLogs = await dreamLogsCollection.find({}).toArray();
+    const dreamLogs: DreamLog[] = await dreamLogsCollection.find({}).toArray();
 
     if (dreamLogs.length === 0) {
       return res.status(404).json({ message: "No logs found" });
@@ -31,7 +30,7 @@ export const getLogById = async (req: Request, res: Response) => {
 
     await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
-    const dreamLog = await dreamLogsCollection.findOne({
+    const dreamLog: DreamLog = await dreamLogsCollection.findOne({
       _id: new ObjectId(id),
     });
 
@@ -55,7 +54,8 @@ export const addLog = async (req: Request, res: Response) => {
 
     await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
-    const dreamLog = await dreamLogsCollection.insertOne(req.body);
+    const dreamLog: InsertOneResult<DreamLog> =
+      await dreamLogsCollection.insertOne(req.body);
 
     res.status(201).json(dreamLog);
   } catch (error) {
@@ -78,9 +78,10 @@ export const editLog = async (req: Request, res: Response) => {
 
     await addCollectionToRequest(req, res, () => {});
     const dreamLogsCollection = (req as any).collections.dreamLogs;
-    const result = await dreamLogsCollection.updateOne(
+    const result: DreamLog = await dreamLogsCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: req.body }
+      { $set: req.body },
+      { new: true }
     );
 
     res.status(200).json(result);
@@ -103,7 +104,7 @@ export const deleteLog = async (req: Request, res: Response) => {
       _id: new ObjectId(id),
     });
 
-    if (result.deletedCount === 0) {
+    if (!result) {
       return res.status(404).json({ message: "Log not found" });
     }
 
