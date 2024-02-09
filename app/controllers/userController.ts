@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
@@ -58,11 +57,6 @@ export const registerUser = async (
   res: Response
 ): Promise<void | Response<any>> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
     const { username, email, password } = req.body;
     const userCollection = (req as any).collections.users;
 

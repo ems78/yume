@@ -1,8 +1,13 @@
 import { NavLink } from "react-router-dom";
-import { BsJournalText, BsTags, BsGearWideConnected } from "react-icons/bs";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  BsJournalText,
+  BsTags,
+  BsGearWideConnected,
+  BsPerson,
+} from "react-icons/bs";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Layout = () => {
+const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <div className="container-fluid vw-100 vh-100">
       <div className="row">
@@ -34,10 +39,17 @@ const Layout = () => {
                 <BsGearWideConnected /> Settings
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink to="/account" className="nav-link text-light fs-5">
+                <BsPerson /> Account
+              </NavLink>
+            </li>
           </nav>
         </div>
-        <div className="col-md-9 py-4">
-          {/* content goes here... */}
+        <div
+          className="col-md-9 py-4 text-light"
+          style={{ backgroundColor: "#2d3748" }}>
+          {children}
         </div>
       </div>
     </div>
