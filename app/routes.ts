@@ -17,7 +17,7 @@ import { registerUser, login } from "./controllers/userController";
 import {
   handleValidationResult,
   validateId,
-  userValidationRules,
+  registrationValidationRules,
   loginValidationRules,
   tagValidationRules,
   dreamLogValidationRules,
@@ -39,7 +39,7 @@ router.delete("/tags/:id", validateId(), handleValidationResult, deleteTag);
 
 router.post(
   "/register",
-  userValidationRules(),
+  registrationValidationRules(),
   handleValidationResult,
   registerUser
 );

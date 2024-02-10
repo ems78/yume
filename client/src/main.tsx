@@ -4,6 +4,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import RegistrationPage from "./pages/RegistrationPage.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,7 +15,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/journal" element={Journal} />
           <Route path="/tags" element={Tags} />
           <Route path="/settings" element={Settings} /> */}
-        <Route path="/account" element={<RegistrationPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   </React.StrictMode>
