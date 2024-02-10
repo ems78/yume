@@ -54,6 +54,20 @@ export const loginValidationRules = () => {
   ];
 };
 
+export const editAccountInfoValidationRules = () => {
+  return [
+    body("username").notEmpty().withMessage("Username is required"),
+    body("username")
+      .isLength({ min: 3 })
+      .withMessage("Username must be at least 3 characters long"),
+    body("username")
+      .isLength({ max: 20 })
+      .withMessage("Username must be at most 20 characters long"),
+    body("email").notEmpty().withMessage("Email is required"),
+    body("email").isEmail().withMessage("Invalid email format"),
+  ];
+};
+
 export const tagValidationRules = () => {
   return [
     body("name").notEmpty().withMessage("Name is required"),

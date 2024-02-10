@@ -171,3 +171,38 @@ export const getUserInfo = async (
     res.status(500).json({ message: "Error getting user info" });
   }
 };
+
+export const editAccountInfo = async (
+  req: Request,
+  res: Response
+): Promise<void | Response<any>> => {
+  try {
+    const userCollection = (req as any).collections.users;
+
+    const userRequest = req as RequestWithUser;
+    const user = await findUserByEmail(
+      userRequest.user.userEmail,
+      userCollection
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { username, email } = req.body;
+    const updatedUser = await userCollection.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { username, email } },
+      { returnDocument: "after" }
+    );
+
+    if (!updatedUser) {
+      return res.status(500).json({ message: "Error updating user info" });
+    } else {
+      res.status(200).json(updatedUser);
+    }
+  } catch (error) {
+    console.error("Error updating user info: ", error);
+    res.status(500).json({ message: "Error updating user info" });
+  }
+};

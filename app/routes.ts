@@ -13,12 +13,18 @@ import {
   editTag,
   deleteTag,
 } from "./controllers/tagController";
-import { registerUser, login, getUserInfo } from "./controllers/userController";
+import {
+  registerUser,
+  login,
+  getUserInfo,
+  editAccountInfo,
+} from "./controllers/userController";
 import {
   handleValidationResult,
   validateId,
   registrationValidationRules,
   loginValidationRules,
+  editAccountInfoValidationRules,
   tagValidationRules,
   dreamLogValidationRules,
 } from "./middleware/validate";
@@ -38,13 +44,20 @@ router.post("/tags", tagValidationRules(), handleValidationResult, addTag);
 router.put("/tags/:id", validateId(), handleValidationResult, editTag);
 router.delete("/tags/:id", validateId(), handleValidationResult, deleteTag);
 
+router.post("/login", loginValidationRules(), handleValidationResult, login);
+router.get("/account", authenticateToken, getUserInfo);
 router.post(
   "/register",
   registrationValidationRules(),
   handleValidationResult,
   registerUser
 );
-router.post("/login", loginValidationRules(), handleValidationResult, login);
-router.get("/account", authenticateToken, getUserInfo);
+router.put(
+  "/account",
+  editAccountInfoValidationRules(),
+  handleValidationResult,
+  authenticateToken,
+  editAccountInfo
+);
 
 export default router;
