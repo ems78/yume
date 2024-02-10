@@ -14,7 +14,7 @@ const RegistrationPage: React.FC = () => {
   });
 
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [otherError, setOtherError] = useState("");
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,48 +22,66 @@ const RegistrationPage: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const checkPasswordMatch = () => {
+    if (formData.password !== confirmPassword) {
+      setOtherError("Passwords do not match");
+      return false;
+    }
+    return true;
+  };
+
+  const handleErrors = (error: Error) => {
+    // console.error("Error registering user: ", error);
+
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+  
+      const { response } = axiosError;
+      if (response) {
+        const { status, data } = response;
+  
+        if (status === 400) {
+          // Bad request (backend validation errors)
+          const { errors } = data as { errors: { path: string; msg: string }[] };
+          if (errors) {
+            const errorMessages: { [key: string]: string } = {};
+            errors.forEach((error: { path: string; msg: string }) => {
+              errorMessages[error.path] = error.msg;
+            });
+            setFormErrors(errorMessages);
+            return;
+          }
+        } else if (status === 409) {
+          // Conflict (email or username already exists)
+          setOtherError((data as { message: string }).message);
+          return;
+        }
+      }
+  
+      // Other errors (500, etc.)
+      setOtherError("Error registering user");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+
+    setOtherError("");
     setFormErrors({});
 
-    if (formData.password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    if (!checkPasswordMatch()) return;
 
     try {
       const response = await axios.post(
         "http://localhost:8800/api/register",
         formData
       );
-      console.log(response);
-
       if (response.status === 201) {
         console.log("Registration successful");
         navigate("/login");
       }
     } catch (error) {
-      console.error("Error registering user: ", error);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response?.status === 400) {
-          const responseData = axiosError.response?.data as {
-            errors: { path: string; msg: string }[];
-          };
-          if (responseData && responseData.errors) {
-            const errorMessages: { [key: string]: string } = {};
-            responseData.errors.forEach((error) => {
-              errorMessages[error.path] = error.msg;
-            });
-            setFormErrors(errorMessages);
-          }
-        } else if (axiosError.response?.status === 409) {
-          setError((axiosError.response.data as { message: string }).message);
-        } else {
-          setError("Error registering user");
-        }
-      }
+      handleErrors(error as Error);
     }
   };
 
@@ -142,7 +160,7 @@ const RegistrationPage: React.FC = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </Form.Group>
-          <Form.Text className="text-danger">{error}</Form.Text>
+          <Form.Text className="text-danger">{otherError}</Form.Text>
           <Row className="align-items-end">
             <Col>
               <Button
