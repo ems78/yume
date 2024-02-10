@@ -13,7 +13,7 @@ import {
   editTag,
   deleteTag,
 } from "./controllers/tagController";
-import { registerUser, login } from "./controllers/userController";
+import { registerUser, login, getUserInfo } from "./controllers/userController";
 import {
   handleValidationResult,
   validateId,
@@ -22,6 +22,7 @@ import {
   tagValidationRules,
   dreamLogValidationRules,
 } from "./middleware/validate";
+import { authenticateToken } from "./middleware/authenticateToken";
 
 const router = express.Router();
 
@@ -44,5 +45,6 @@ router.post(
   registerUser
 );
 router.post("/login", loginValidationRules(), handleValidationResult, login);
+router.get("/account", authenticateToken, getUserInfo);
 
 export default router;

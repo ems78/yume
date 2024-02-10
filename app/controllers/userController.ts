@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
-import { User } from "../interfaces";
+import { RequestWithUser, User } from "../interfaces";
 import { Collection } from "mongoose";
 
 /**
@@ -145,5 +145,29 @@ const hashPassword = async (password: string) => {
   } catch (error) {
     console.error("Error hashing password: ", error);
     throw error;
+  }
+};
+
+export const getUserInfo = async (
+  req: Request,
+  res: Response
+): Promise<void | Response<any>> => {
+  try {
+    const userCollection = (req as any).collections.users;
+
+    const userRequest = req as RequestWithUser;
+    const user = await findUserByEmail(
+      userRequest.user.userEmail,
+      userCollection
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    } else {
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    console.error("Error getting user info: ", error);
+    res.status(500).json({ message: "Error getting user info" });
   }
 };

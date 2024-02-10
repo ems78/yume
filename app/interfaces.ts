@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Document, Types } from "mongoose";
+import { Request } from "express";
 
 interface Tag extends Document {
   _id: ObjectId;
@@ -25,4 +26,13 @@ interface User extends Document {
   dreamLogs: Types.ObjectId[];
 }
 
-export { Tag, DreamLog, User };
+interface TokenPayload {
+  userId: ObjectId;
+  userEmail: string;
+}
+
+interface RequestWithUser extends Request {
+  user: TokenPayload;
+}
+
+export { Tag, DreamLog, User, TokenPayload, RequestWithUser };
