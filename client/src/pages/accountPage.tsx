@@ -98,7 +98,7 @@ const AccountPage = () => {
             type="text"
             className="form-control"
             id="username"
-            value={user?.username}
+            value={user?.username || ""}
             disabled={!isEditing}
             onChange={handleChange}
           />
@@ -111,7 +111,7 @@ const AccountPage = () => {
             type="email"
             className="form-control"
             id="email"
-            value={user?.email}
+            value={user?.email || ""}
             disabled={!isEditing}
             onChange={handleChange}
           />

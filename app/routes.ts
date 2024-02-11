@@ -32,7 +32,7 @@ import { authenticateToken } from "./middleware/authenticateToken";
 
 const router = express.Router();
 
-router.get("/logs", getLogs);
+router.get("/logs", authenticateToken, getLogs);
 router.get("/logs/:id", validateId(), handleValidationResult, getLogById);
 router.post("/logs", dreamLogValidationRules(), handleValidationResult, addLog);
 router.put("/logs/:id", validateId(), handleValidationResult, editLog);

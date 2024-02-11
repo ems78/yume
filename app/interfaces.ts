@@ -17,6 +17,10 @@ interface DreamLog extends Document {
   tags: Types.ObjectId[];
 }
 
+interface LogProps {
+  dreamLog: DreamLog;
+}
+
 interface User extends Document {
   _id: ObjectId;
   username: string;
@@ -35,4 +39,4 @@ interface RequestWithUser extends Request {
   user: TokenPayload;
 }
 
-export { Tag, DreamLog, User, TokenPayload, RequestWithUser };
+export { Tag, DreamLog, LogProps, User, TokenPayload, RequestWithUser };

@@ -1,11 +1,17 @@
 import { Request, Response } from "express";
-import { DreamLog } from "../interfaces";
+import { DreamLog, RequestWithUser } from "../interfaces";
 import { ObjectId, InsertOneResult } from "mongodb";
 
 export const getLogs = async (req: Request, res: Response) => {
   try {
+    const userReq = req as RequestWithUser;
+    const userIdstring = userReq.user.userId;
+    const userId = new ObjectId(userIdstring);
+
     const dreamLogsCollection = (req as any).collections.dreamLogs;
-    const dreamLogs: DreamLog[] = await dreamLogsCollection.find({}).toArray();
+    const dreamLogs: DreamLog[] = await dreamLogsCollection
+      .find({ userId: userId })
+      .toArray();
 
     if (dreamLogs.length === 0) {
       return res.status(404).json({ message: "No logs found" });
