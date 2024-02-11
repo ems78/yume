@@ -34,11 +34,11 @@ const router = express.Router();
 
 router.get("/logs", authenticateToken, getLogs);
 router.get("/logs/:id", validateId(), handleValidationResult, getLogById);
-router.post("/logs", dreamLogValidationRules(), handleValidationResult, addLog);
+router.post("/logs", authenticateToken, dreamLogValidationRules(), handleValidationResult, addLog);
 router.put("/logs/:id", validateId(), handleValidationResult, editLog);
 router.delete("/logs/:id", validateId(), handleValidationResult, deleteLog);
 
-router.get("/tags", getTags);
+router.get("/tags", authenticateToken, getTags);
 router.get("/tags/:id", validateId(), handleValidationResult, getTagById);
 router.post("/tags", tagValidationRules(), handleValidationResult, addTag);
 router.put("/tags/:id", validateId(), handleValidationResult, editTag);

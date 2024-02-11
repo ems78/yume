@@ -21,13 +21,18 @@ interface LogProps {
   dreamLog: DreamLog;
 }
 
+interface DreamLogFormProps {
+  children: React.ReactNode;
+  setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 interface User extends Document {
   _id: ObjectId;
   username: string;
   passwordHash: string;
   email: string;
-  tags: Types.ObjectId[];
-  dreamLogs: Types.ObjectId[];
+  // tags: Types.ObjectId[];
+  // dreamLogs: Types.ObjectId[];
 }
 
 interface TokenPayload {
@@ -39,4 +44,4 @@ interface RequestWithUser extends Request {
   user: TokenPayload;
 }
 
-export { Tag, DreamLog, LogProps, User, TokenPayload, RequestWithUser };
+export { Tag, DreamLog, LogProps, DreamLogFormProps, User, TokenPayload, RequestWithUser };

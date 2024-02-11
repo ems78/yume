@@ -19,6 +19,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/mongodb": "^4.0.7",
     "@types/node": "^20.11.5",
+    "@types/react-datepicker": "^4.19.6",
     "dotenv": "^16.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

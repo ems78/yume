@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
-import { Tag } from "../interfaces";
+import { RequestWithUser, Tag } from "../interfaces";
 import { ObjectId, InsertOneResult } from "mongodb";
 
 export const getTags = async (req: Request, res: Response) => {
   try {
+    const userReq = req as RequestWithUser;
+    const userId = userReq.user.userId;
+
     const tagsCollection = (req as any).collections.tags;
-    const tags: Tag[] = await tagsCollection.find({}).toArray();
+    const tags: Tag[] = await tagsCollection.find({ userId: userId }).toArray();
 
     if (tags.length === 0) {
       return res.status(404).json({ message: "No tags found" });

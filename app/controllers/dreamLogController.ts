@@ -44,11 +44,18 @@ export const getLogById = async (req: Request, res: Response) => {
 
 export const addLog = async (req: Request, res: Response) => {
   try {
+    const userReq = req as RequestWithUser;
+    const userIdstring = userReq.user.userId;
+    const userId = new ObjectId(userIdstring);
+
+    const dreamLog: DreamLog = req.body;
+    dreamLog.userId = userId;
+
     const dreamLogsCollection = (req as any).collections.dreamLogs;
-    const dreamLog: InsertOneResult<DreamLog> =
+    const result: InsertOneResult<DreamLog> =
       await dreamLogsCollection.insertOne(req.body);
 
-    res.status(201).json(dreamLog);
+    res.status(201).json(result);
   } catch (error) {
     console.error("Error adding dream log: ", error);
     res.status(500).json({ message: "Server error" });

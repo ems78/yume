@@ -5,11 +5,13 @@ import { DreamLog } from "../../../app/interfaces";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import DreamLogForm from "../components/DreamLogForm";
 
 const JournalPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [dreamLogs, setDreamLogs] = useState<DreamLog[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     const fetchDreamLogs = async () => {
@@ -44,13 +46,24 @@ const JournalPage: React.FC = () => {
     fetchDreamLogs();
   }, [navigate]);
 
+  const handleNewLogClick = () => {
+    setIsCreating(true);
+  };
+
   return (
     <Layout>
       <div className="container" style={{ maxWidth: "50%", marginTop: "1%" }}>
         <h2 className="mb-4 text-center">Journal</h2>
         <div className="mb-4">
-          <Button variant="outline-light">New log</Button>
+          {!isCreating ? (
+            <Button variant="outline-light" onClick={handleNewLogClick}>
+              New log
+            </Button>
+          ) : (
+            <DreamLogForm setIsCreating={setIsCreating} />
+          )}
         </div>
+        <hr className="mb-4" style={{ backgroundColor: "white" }} />
         {dreamLogs.map((log) => (
           <Log key={log._id.toString()} dreamLog={log} />
         ))}
