@@ -48,7 +48,7 @@ const DreamLogPage: React.FC = () => {
           console.log("No tags found");
           return;
         }
-        console.log("Error fetching tags: ", error);
+        console.log("Error fetching tags: ", error); // TODO: show error message as snackbar
       }
     };
 
@@ -137,7 +137,6 @@ const DreamLogPage: React.FC = () => {
         tags: [...dream.tags, tag._id.toString()],
       });
     }
-
     setSearchTerm("");
     setSearchResults([]);
   };
@@ -174,6 +173,11 @@ const DreamLogPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!dream || dream === originalDream) {
+      setIsEditing(false);
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -194,14 +198,13 @@ const DreamLogPage: React.FC = () => {
       );
 
       if (response.status === 200) {
+        setOriginalDream(dream);
+        setIsEditing(false);
         console.log("Log updated"); // TODO: show snackbar message
       }
     } catch (error) {
       console.log("Error updating log: ", error); // TODO: show snackbar message
     }
-
-    setOriginalDream(dream);
-    setIsEditing(false);
   };
 
   return (

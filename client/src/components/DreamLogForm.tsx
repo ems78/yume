@@ -39,7 +39,7 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
           console.log("No tags found");
           return;
         }
-        console.log("Error fetching tags: ", error);
+        console.log("Error fetching tags: ", error); // TODO: show error message as snackbar
       }
     };
 
@@ -91,18 +91,15 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
   };
 
   const handleRemoveTag = (tag: Tag) => {
-    const updatedTags = selectedTags.filter((t) => t !== tag);
-    setSelectedTags(updatedTags);
-    const updatedTagIds = dream.tags.filter(
-      (tagId) => tagId !== tag._id.toString()
-    );
-    setDream({ ...dream, tags: updatedTagIds });
+    setSelectedTags(selectedTags.filter((t) => t !== tag));
+    setDream({
+      ...dream,
+      tags: dream.tags.filter((tagId) => tagId !== tag._id.toString()),
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setIsCreating(false);
 
     try {
       const token = localStorage.getItem("token");
@@ -120,14 +117,13 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
         }
       );
       if (response.status === 201) {
-        console.log(response.data.insertedId);
         addDreamLog(response.data.insertedId);
+        setIsCreating(false);
         console.log("Dream log saved"); // TODO: show success message as snackbar
       }
     } catch (error) {
       console.log("Error saving dream log: ", error); // TODO: show error message as snackbar
     }
-
     setSearchTerm("");
   };
 

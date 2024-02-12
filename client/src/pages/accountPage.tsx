@@ -9,6 +9,7 @@ const AccountPage = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User | null>(null);
+  const [originalUserInfo, setOriginalUserInfo] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const AccountPage = () => {
         if (response.status === 200) {
           const user = response.data as User;
           setUser(user);
+          setOriginalUserInfo(user);
         } else {
           // TODO: show error message as snackbar
           navigate("/login");
@@ -51,6 +53,10 @@ const AccountPage = () => {
   const handleSave = async () => {
     setIsEditing(false);
 
+    if (!user || user === originalUserInfo) {
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
       return;
@@ -68,6 +74,14 @@ const AccountPage = () => {
 
     console.log(response);
     // TODO: show success/error message as snackbar
+    if (response.status === 200) {
+      setOriginalUserInfo(user);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setUser(originalUserInfo);
+    setIsEditing(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +145,7 @@ const AccountPage = () => {
                 <Button
                   variant="secondary"
                   className="mt-3 ms-2"
-                  onClick={() => setIsEditing(false)}>
+                  onClick={handleCancelClick}>
                   Cancel
                 </Button>
               </div>
