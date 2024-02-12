@@ -12,7 +12,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     <div className="container-fluid vw-100 vh-100">
       <div className="row">
         {/* Side nav */}
-        <div className="col-md-3 bg-dark text-light py-4 vh-100 p-4">
+        <div
+          className="col-md-3 py-4 vh-100 p-4 bg-dark"
+          style={{ color: "#E9D5CA" }}>
           {/* Logo */}
           <div className="text-center mb-4">
             <img
@@ -23,12 +25,14 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             <h5 className="mb-5">Yume</h5>
           </div>
           {/* Nav buttons */}
-          <nav className="nav flex-column bg-dark">
+          <nav
+            className="nav flex-column bg-dark"
+            style={{ backgroundColor: "#51557E" }}>
             <li className="nav-item">
               <NavLink
                 to="/journal"
                 className="nav-link fs-5"
-                style={{ color: "#F0ECE5" }}>
+                style={{ color: "#E9D5CA" }}>
                 <BsJournalText /> Journal
               </NavLink>
             </li>
@@ -36,7 +40,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               <NavLink
                 to="/tags"
                 className="nav-link fs-5"
-                style={{ color: "#F0ECE5" }}>
+                style={{ color: "#E9D5CA" }}>
                 <BsTags /> Tags
               </NavLink>
             </li>
@@ -44,7 +48,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               <NavLink
                 to="/settings"
                 className="nav-link fs-5"
-                style={{ color: "#F0ECE5" }}>
+                style={{ color: "#E9D5CA" }}>
                 <BsGearWideConnected /> Settings
               </NavLink>
             </li>
@@ -52,7 +56,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               <NavLink
                 to="/account"
                 className="nav-link fs-5"
-                style={{ color: "#F0ECE5" }}>
+                style={{ color: "#E9D5CA" }}>
                 <BsPerson /> Account
               </NavLink>
             </li>
@@ -60,7 +64,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         </div>
         <div
           className="col-md-9 py-4 text-light"
-          style={{ backgroundColor: "#2d3748" }}>
+          style={{ backgroundColor: "#3A3845" }}>
           {children}
         </div>
       </div>

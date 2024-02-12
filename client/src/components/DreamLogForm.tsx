@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Badge, Button, Dropdown, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -45,6 +45,25 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
 
     fetchTags();
   }, []);
+
+  useEffect(() => {
+    const closeDropdown = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener("mousedown", closeDropdown);
+
+    return () => {
+      document.removeEventListener("mousedown", closeDropdown);
+    };
+  }, []);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDream({ ...dream, [e.target.name]: e.target.value });
@@ -117,7 +136,7 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
           selected={dream.date}
           onChange={handleDateChange}
           dateFormat="dd/MM/yyyy"
-          className="form-control"
+          className="form-control text-center"
         />
       </Form.Group>
       <Form.Group>
@@ -128,8 +147,10 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
           onChange={handleTagSearch}
           placeholder="Search for tags"
         />
-        <Dropdown.Menu show={searchResults.length > 0}>
-          {searchResults.map((tag, index) => (
+        <Dropdown.Menu
+          ref={dropdownRef}
+          show={searchTerm.length > 0 && searchResults.length > 0}>
+          {searchResults.slice(0, 5).map((tag, index) => (
             <Dropdown.Item key={index} onClick={() => handleTagSelect(tag)}>
               {tag.name}
             </Dropdown.Item>
@@ -167,11 +188,11 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
           rows={8}
         />
       </Form.Group>
-      <Button variant="outline-light" type="submit" className="mt-3">
+      <Button variant="outline-success" type="submit" className="mt-3">
         Save
       </Button>
       <Button
-        variant="outline-warning"
+        variant="outline-danger"
         onClick={() => setIsCreating(false)}
         className="mt-3 ms-3">
         Cancel

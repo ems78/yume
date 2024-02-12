@@ -90,7 +90,7 @@ const JournalPage: React.FC = () => {
         <h2 className="mb-4 text-center">Journal</h2>
         <div className="mb-4">
           {!isCreating ? (
-            <Button variant="outline-light" onClick={handleNewLogClick}>
+            <Button variant="outline-warning" onClick={handleNewLogClick}>
               New log
             </Button>
           ) : (

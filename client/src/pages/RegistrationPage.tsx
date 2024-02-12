@@ -97,6 +97,7 @@ const RegistrationPage: React.FC = () => {
         style={{
           maxWidth: "50%",
           marginTop: "10%",
+          color: "#E9D5CA",
         }}>
         <h2 className="mb-4 text-center">Register</h2>
         <Form onSubmit={handleSubmit} className="mx-auto">
@@ -179,7 +180,7 @@ const RegistrationPage: React.FC = () => {
           <Row className="align-items-end">
             <Col>
               <Button
-                variant="primary"
+                variant="warning"
                 type="submit"
                 className="mt-3"
                 style={{ width: "50%" }}>
@@ -189,7 +190,7 @@ const RegistrationPage: React.FC = () => {
             <Col className="text-end mt-3">
               <span>Already have an account?</span>
               <Button
-                variant="secondary"
+                variant="light"
                 onClick={handleLoginButtonClick}
                 style={{ width: "50%" }}>
                 Log in

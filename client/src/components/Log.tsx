@@ -8,12 +8,18 @@ const Log: React.FC<LogProps> = ({ dreamLog }) => {
 
   return (
     <div className="card mb-3" style={{ backgroundColor: "#445069" }}>
-      <div className="card-header" style={{ backgroundColor: "#EEE0C9" }}>
+      <div
+        className="card-header text-center"
+        style={{
+          backgroundColor: "#595260",
+          color: "#B2B1B9",
+          fontWeight: "bold",
+        }}>
         {formattedDate}
       </div>
       <div
         className="card-body"
-        style={{ backgroundColor: "#445069", color: "#F0ECE5" }}>
+        style={{ backgroundColor: "#B2B1B9", color: "#2C2E43" }}>
         <h5 className="card-title">{title}</h5>
         <p
           className="card-text"

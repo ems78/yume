@@ -88,6 +88,7 @@ const AccountPage = () => {
         style={{
           maxWidth: "50%",
           marginTop: "10%",
+          color: "#E9D5CA",
         }}>
         <h2 className="mb-4 text-center">Account</h2>
         <div className="mb-3">
@@ -119,13 +120,21 @@ const AccountPage = () => {
         <Row className="align-items-end">
           <Col>
             {!isEditing ? (
-              <Button variant="secondary" className="mt-3" onClick={handleEdit}>
+              <Button variant="warning" className="mt-3" onClick={handleEdit}>
                 Edit account info
               </Button>
             ) : (
-              <Button variant="success" className="mt-3" onClick={handleSave}>
-                Save
-              </Button>
+              <div>
+                <Button variant="success" className="mt-3" onClick={handleSave}>
+                  Save
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="mt-3 ms-2"
+                  onClick={() => setIsEditing(false)}>
+                  Cancel
+                </Button>
+              </div>
             )}
           </Col>
           <Col className="text-end mt-3">
