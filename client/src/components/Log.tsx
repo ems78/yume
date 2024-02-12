@@ -2,10 +2,10 @@ import React from "react";
 import { LogProps } from "../../../app/interfaces";
 import { useNavigate } from "react-router-dom";
 
-const Log: React.FC<LogProps> = ({ dreamLog }) => {
+const Log: React.FC<LogProps> = ({ dreamLog, handleDeleteClick }) => {
   const navigate = useNavigate();
 
-  const { date, title, content } = dreamLog;
+  const { _id, date, title, content } = dreamLog;
 
   const formattedDate = new Date(date).toLocaleDateString("en-US");
 
@@ -39,7 +39,11 @@ const Log: React.FC<LogProps> = ({ dreamLog }) => {
             onClick={handleOpenClick}>
             Open
           </button>
-          <button className="btn btn-outline-danger btn-sm">Delete</button>
+          <button
+            className="btn btn-outline-danger btn-sm"
+            onClick={() => handleDeleteClick(_id.toString())}>
+            Delete
+          </button>
         </div>
       </div>
     </div>

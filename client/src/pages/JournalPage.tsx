@@ -53,6 +53,40 @@ const JournalPage: React.FC = () => {
     setIsCreating(true);
   };
 
+  const handleDeleteClick = async (logId: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this log?"
+    );
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.delete(
+        `http://localhost:8800/api/logs/${logId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const updatedDreamLogs = dreamLogs.filter(
+          (log) => log._id.toString() !== logId
+        );
+        setDreamLogs(updatedDreamLogs);
+      }
+    } catch (error) {
+      console.log("Error deleting dream log: ", error);
+    }
+  };
+
   const addDreamLog = async (logId: string) => {
     try {
       const token = localStorage.getItem("token");
@@ -86,7 +120,9 @@ const JournalPage: React.FC = () => {
 
   return (
     <Layout>
-      <div className="container" style={{ maxWidth: "50%", marginTop: "1%", color:"#F0ECE5" }}>
+      <div
+        className="container"
+        style={{ maxWidth: "50%", marginTop: "1%", color: "#F0ECE5" }}>
         <h2 className="mb-4 text-center">Journal</h2>
         <div className="mb-4">
           {!isCreating ? (
@@ -102,7 +138,11 @@ const JournalPage: React.FC = () => {
         </div>
         <hr className="mb-4" style={{ backgroundColor: "white" }} />
         {dreamLogs.map((log) => (
-          <Log key={log._id.toString()} dreamLog={log} />
+          <Log
+            key={log._id.toString()}
+            dreamLog={log}
+            handleDeleteClick={handleDeleteClick}
+          />
         ))}
       </div>
     </Layout>

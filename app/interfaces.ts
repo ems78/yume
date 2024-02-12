@@ -19,6 +19,7 @@ interface DreamLog extends Document {
 
 interface LogProps {
   dreamLog: DreamLog;
+  handleDeleteClick: (logId: string) => void;
 }
 
 interface DreamLogFormProps {
