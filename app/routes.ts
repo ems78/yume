@@ -33,9 +33,9 @@ import { authenticateToken } from "./middleware/authenticateToken";
 const router = express.Router();
 
 router.get("/logs", authenticateToken, getLogs);
-router.get("/logs/:id", validateId(), handleValidationResult, getLogById);
+router.get("/logs/:id", authenticateToken, validateId(), handleValidationResult, getLogById);
 router.post("/logs", authenticateToken, dreamLogValidationRules(), handleValidationResult, addLog);
-router.put("/logs/:id", validateId(), handleValidationResult, editLog);
+router.put("/logs/:id", authenticateToken, validateId(), handleValidationResult, editLog);
 router.delete("/logs/:id", validateId(), handleValidationResult, deleteLog);
 
 router.get("/tags", authenticateToken, getTags);

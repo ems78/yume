@@ -127,6 +127,8 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
     } catch (error) {
       console.log("Error saving dream log: ", error); // TODO: show error message as snackbar
     }
+
+    setSearchTerm("");
   };
 
   return (

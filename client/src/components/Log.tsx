@@ -1,10 +1,17 @@
 import React from "react";
 import { LogProps } from "../../../app/interfaces";
+import { useNavigate } from "react-router-dom";
 
 const Log: React.FC<LogProps> = ({ dreamLog }) => {
+  const navigate = useNavigate();
+
   const { date, title, content } = dreamLog;
 
   const formattedDate = new Date(date).toLocaleDateString("en-US");
+
+  const handleOpenClick = () => {
+    navigate(`/dreamLog/${dreamLog._id}`);
+  };
 
   return (
     <div className="card mb-3" style={{ backgroundColor: "#445069" }}>
@@ -27,7 +34,11 @@ const Log: React.FC<LogProps> = ({ dreamLog }) => {
           {content}
         </p>
         <div className="d-flex justify-content-end mt-4">
-          <button className="btn btn-outline-light btn-sm me-2">Open</button>
+          <button
+            className="btn btn-outline-light btn-sm me-2"
+            onClick={handleOpenClick}>
+            Open
+          </button>
           <button className="btn btn-outline-danger btn-sm">Delete</button>
         </div>
       </div>

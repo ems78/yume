@@ -65,9 +65,12 @@ export const addLog = async (req: Request, res: Response) => {
 export const editLog = async (req: Request, res: Response) => {
   try {
     const dreamLogsCollection = (req as any).collections.dreamLogs;
+    const dreamLog: DreamLog = req.body;
+    dreamLog.userId = new ObjectId(req.body.userId);
+
     const result: DreamLog = await dreamLogsCollection.updateOne(
       { _id: new ObjectId(req.params.id) },
-      { $set: req.body },
+      { $set: dreamLog },
       { new: true }
     );
 

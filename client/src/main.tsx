@@ -7,6 +7,7 @@ import RegistrationPage from "./pages/RegistrationPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import AccountPage from "./pages/AccountPage.tsx";
 import JournalPage from "./pages/JournalPage.tsx";
+import DreamLogPage from "./pages/DreamLogPage.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/tags" element={Tags} />
         <Route path="/settings" element={Settings} /> */}
         <Route path="/journal" element={<JournalPage />} />
+        <Route path="/dreamLog/:id" element={<DreamLogPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />

@@ -88,6 +88,12 @@ export const dreamLogValidationRules = () => {
       .isLength({ max: 2700 })
       .withMessage("Description must be at most 2700 characters long"),
     body("tags").isArray().withMessage("Tags must be an array"),
+    body("tags.*").custom((value, { req }) => {
+      if (req.body.tags.indexOf(value) !== req.body.tags.lastIndexOf(value)) {
+        throw new Error("Duplicate tag found");
+      }
+      return true;
+    }),
     body("tags.*").custom((value) => {
       if (!ObjectId.isValid(value)) {
         throw new Error("Invalid tag ID format");
