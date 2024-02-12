@@ -83,8 +83,8 @@ export const dreamLogValidationRules = () => {
     body("title")
       .isLength({ max: 50 })
       .withMessage("Title must be at most 50 characters long"),
-    body("description").notEmpty().withMessage("Description is required"),
-    body("description")
+    body("content").notEmpty().withMessage("Description is required"),
+    body("content")
       .isLength({ max: 2700 })
       .withMessage("Description must be at most 2700 characters long"),
     body("tags").isArray().withMessage("Tags must be an array"),
@@ -96,6 +96,5 @@ export const dreamLogValidationRules = () => {
     }),
     body("date").notEmpty().withMessage("Date is required"),
     body("date").isISO8601().withMessage("Invalid date format"),
-    body("userId").notEmpty().withMessage("User ID is required"),
   ];
 };

@@ -25,22 +25,34 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           {/* Nav buttons */}
           <nav className="nav flex-column bg-dark">
             <li className="nav-item">
-              <NavLink to="/journal" className="nav-link text-light fs-5">
+              <NavLink
+                to="/journal"
+                className="nav-link fs-5"
+                style={{ color: "#F0ECE5" }}>
                 <BsJournalText /> Journal
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/tags" className="nav-link text-light fs-5">
+              <NavLink
+                to="/tags"
+                className="nav-link fs-5"
+                style={{ color: "#F0ECE5" }}>
                 <BsTags /> Tags
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/settings" className="nav-link text-light fs-5">
+              <NavLink
+                to="/settings"
+                className="nav-link fs-5"
+                style={{ color: "#F0ECE5" }}>
                 <BsGearWideConnected /> Settings
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/account" className="nav-link text-light fs-5">
+              <NavLink
+                to="/account"
+                className="nav-link fs-5"
+                style={{ color: "#F0ECE5" }}>
                 <BsPerson /> Account
               </NavLink>
             </li>

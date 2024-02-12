@@ -31,7 +31,10 @@ const JournalPage: React.FC = () => {
         if (response.status === 200) {
           const dreamLogs = response.data as DreamLog[];
           setDreamLogs(dreamLogs);
-          return;
+          const sortedDreamLogs = dreamLogs.slice().sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+          setDreamLogs(sortedDreamLogs);
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -50,9 +53,40 @@ const JournalPage: React.FC = () => {
     setIsCreating(true);
   };
 
+  const addDreamLog = async (logId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.get(
+        `http://localhost:8800/api/logs/${logId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const dreamLog = response.data as DreamLog;
+        setDreamLogs((prevDreamLogs) => {
+          const updatedDreamLogs = [...prevDreamLogs, dreamLog];
+          const sortedDreamLogs = updatedDreamLogs.slice().sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+          return sortedDreamLogs;
+        });
+      }
+    } catch (error) {
+      console.log("Error fetching dream log: ", error);
+    }
+  };
+
   return (
     <Layout>
-      <div className="container" style={{ maxWidth: "50%", marginTop: "1%" }}>
+      <div className="container" style={{ maxWidth: "50%", marginTop: "1%", color:"#F0ECE5" }}>
         <h2 className="mb-4 text-center">Journal</h2>
         <div className="mb-4">
           {!isCreating ? (
@@ -60,7 +94,10 @@ const JournalPage: React.FC = () => {
               New log
             </Button>
           ) : (
-            <DreamLogForm setIsCreating={setIsCreating} />
+            <DreamLogForm
+              setIsCreating={setIsCreating}
+              addDreamLog={addDreamLog}
+            />
           )}
         </div>
         <hr className="mb-4" style={{ backgroundColor: "white" }} />

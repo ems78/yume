@@ -22,8 +22,8 @@ interface LogProps {
 }
 
 interface DreamLogFormProps {
-  children: React.ReactNode;
   setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
+  addDreamLog: (logId: string) => void;
 }
 
 interface User extends Document {

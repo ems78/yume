@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import { Badge, Button, Dropdown, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Tag } from "../../../app/interfaces";
+import { DreamLogFormProps, Tag } from "../../../app/interfaces";
 import { FaTimes } from "react-icons/fa";
 
-const DreamLogForm = ({
+const DreamLogForm: React.FC<DreamLogFormProps> = ({
   setIsCreating,
-}: {
-  setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
+  addDreamLog,
 }) => {
   const [dream, setDream] = useState({
     title: "",
@@ -81,13 +80,34 @@ const DreamLogForm = ({
     setDream({ ...dream, tags: updatedTagIds });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsCreating(false);
 
-    console.log("Submitting dream log");
-    console.log(dream);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.post(
+        "http://localhost:8800/api/logs",
+        dream,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 201) {
+        console.log(response.data.insertedId);
+        addDreamLog(response.data.insertedId);
+        console.log("Dream log saved"); // TODO: show success message as snackbar
+      }
+    } catch (error) {
+      console.log("Error saving dream log: ", error); // TODO: show error message as snackbar
+    }
   };
 
   return (
@@ -151,7 +171,7 @@ const DreamLogForm = ({
         Save
       </Button>
       <Button
-        variant="outline-light"
+        variant="outline-warning"
         onClick={() => setIsCreating(false)}
         className="mt-3 ms-3">
         Cancel
