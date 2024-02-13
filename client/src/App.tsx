@@ -13,7 +13,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <div className="row">
         {/* Side nav */}
         <div
-          className="col-md-3 py-4 vh-100 p-4 bg-dark position-fixed"
+          className="col-md-3 py-4 p-4 bg-dark position-fixed"
           style={{ color: "#E9D5CA", top: 0, bottom: 0, overflowY: "auto" }}>
           {/* Logo */}
           <div className="text-center mb-4">
@@ -64,7 +64,12 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         </div>
         <div
           className="col-md-9 py-4 text-light"
-          style={{ backgroundColor: "#3A3845", marginLeft: "25%" }}>
+          style={{
+            backgroundColor: "#3A3845",
+            marginLeft: "25%",
+            overflowY: "auto",
+            height: "100vh",
+          }}>
           {children}
         </div>
       </div>

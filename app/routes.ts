@@ -63,9 +63,9 @@ router.delete(
 );
 
 router.get("/tags", authenticateToken, getTags);
-router.get("/tags/:id", validateId(), handleValidationResult, getTagById);
+router.get("/tags/:id", authenticateToken, validateId(), handleValidationResult, getTagById);
 router.post("/tags", tagValidationRules(), handleValidationResult, addTag);
-router.put("/tags/:id", validateId(), handleValidationResult, editTag);
+router.put("/tags/:id", authenticateToken, validateId(), handleValidationResult, editTag);
 router.delete("/tags/:id", validateId(), handleValidationResult, deleteTag);
 
 router.post("/login", loginValidationRules(), handleValidationResult, login);

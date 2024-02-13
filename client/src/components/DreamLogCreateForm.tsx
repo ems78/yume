@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { DreamLogFormProps, Tag } from "../../../app/interfaces";
 import { FaTimes } from "react-icons/fa";
 
-const DreamLogForm: React.FC<DreamLogFormProps> = ({
+const DreamLogCreateForm: React.FC<DreamLogFormProps> = ({
   setIsCreating,
   addDreamLog,
 }) => {
@@ -199,4 +199,4 @@ const DreamLogForm: React.FC<DreamLogFormProps> = ({
   );
 };
 
-export default DreamLogForm;
+export default DreamLogCreateForm;

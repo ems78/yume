@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../App";
-import Log from "../components/Log";
+import Log from "../components/DreamLog";
 import { DreamLog } from "../../../app/interfaces";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import DreamLogForm from "../components/DreamLogForm";
+import DreamLogForm from "../components/DreamLogCreateForm";
 
 const JournalPage: React.FC = () => {
   const navigate = useNavigate();

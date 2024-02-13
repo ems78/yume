@@ -2,7 +2,7 @@ import React from "react";
 import { LogProps } from "../../../app/interfaces";
 import { useNavigate } from "react-router-dom";
 
-const Log: React.FC<LogProps> = ({ dreamLog, handleDeleteClick }) => {
+const DreamLog: React.FC<LogProps> = ({ dreamLog, handleDeleteClick }) => {
   const navigate = useNavigate();
 
   const { _id, date, title, content } = dreamLog;
@@ -50,4 +50,4 @@ const Log: React.FC<LogProps> = ({ dreamLog, handleDeleteClick }) => {
   );
 };
 
-export default Log;
+export default DreamLog;

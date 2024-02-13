@@ -8,6 +8,12 @@ interface Tag extends Document {
   userId: ObjectId;
 }
 
+interface TagProps {
+  tag: Tag;
+  handleEditTag: (tagId: string, editedTagName: string) => void;
+  handleDeleteTag: (tagId: string) => void;
+}
+
 interface DreamLog extends Document {
   _id: ObjectId;
   userId: ObjectId;
@@ -45,4 +51,4 @@ interface RequestWithUser extends Request {
   user: TokenPayload;
 }
 
-export { Tag, DreamLog, LogProps, DreamLogFormProps, User, TokenPayload, RequestWithUser };
+export { Tag, TagProps, DreamLog, LogProps, DreamLogFormProps, User, TokenPayload, RequestWithUser };
