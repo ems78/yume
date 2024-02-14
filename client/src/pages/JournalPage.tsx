@@ -5,7 +5,7 @@ import { DreamLog } from "../../../app/interfaces";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import DreamLogForm from "../components/DreamLogCreateForm";
+import DreamLogCreateForm from "../components/DreamLogCreateForm";
 
 const JournalPage: React.FC = () => {
   const navigate = useNavigate();
@@ -48,10 +48,6 @@ const JournalPage: React.FC = () => {
 
     fetchDreamLogs();
   }, [navigate]);
-
-  const handleNewLogClick = () => {
-    setIsCreating(true);
-  };
 
   const handleDeleteClick = async (logId: string) => {
     const confirmDelete = window.confirm(
@@ -122,15 +118,17 @@ const JournalPage: React.FC = () => {
     <Layout>
       <div
         className="container"
-        style={{ maxWidth: "50%", marginTop: "1%", color: "#F0ECE5" }}>
+        style={{ maxWidth: "50%", marginTop: "1%", color: "#E9D5CA" }}>
         <h2 className="mb-4 text-center">Journal</h2>
         <div className="mb-4">
           {!isCreating ? (
-            <Button variant="outline-warning" onClick={handleNewLogClick}>
+            <Button
+              variant="outline-warning"
+              onClick={() => setIsCreating(true)}>
               New log
             </Button>
           ) : (
-            <DreamLogForm
+            <DreamLogCreateForm
               setIsCreating={setIsCreating}
               addDreamLog={addDreamLog}
             />

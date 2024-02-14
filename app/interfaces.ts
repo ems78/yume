@@ -6,6 +6,7 @@ interface Tag extends Document {
   _id: ObjectId;
   name: string;
   userId: ObjectId;
+  isDeleted: boolean;
 }
 
 interface TagProps {

@@ -41,6 +41,9 @@ export const getTagById = async (req: Request, res: Response) => {
 
 export const addTag = async (req: Request, res: Response) => {
   try {
+    const newTag = req.body as Tag;
+    newTag.userId = (req as RequestWithUser).user.userId;
+
     const tagsCollection = (req as any).collections.tags;
     const tag: InsertOneResult<Tag> = await tagsCollection.insertOne(req.body);
 
@@ -73,10 +76,12 @@ export const editTag = async (req: Request, res: Response) => {
 
 export const deleteTag = async (req: Request, res: Response) => {
   try {
+    console.log("deleteTag1");
     const tagsCollection = (req as any).collections.tags;
-    const tag: Tag = await tagsCollection.findOneAndDelete({
-      _id: new ObjectId(req.params.id),
-    });
+    const tag = await tagsCollection.findOneAndUpdate(
+      { _id: new ObjectId(req.params.id) },
+      { $set: { isDeleted: true } }
+    );
 
     if (!tag) {
       return res.status(404).json({ message: "Tag not found" });

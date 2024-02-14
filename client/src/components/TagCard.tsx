@@ -73,7 +73,7 @@ const TagCard: React.FC<TagProps> = ({
             variant="outline-danger"
             size="sm"
             className="ms-2"
-            onClick={() => handleDeleteTag(tag.id.toString())}>
+            onClick={() => handleDeleteTag(tag._id.toString())}>
             Delete
           </Button>
         </div>

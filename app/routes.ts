@@ -111,7 +111,18 @@ router.get(
  * POST /api/tags
  * adds a tag
  */
-router.post("/tags", tagValidationRules(), handleValidationResult, addTag);
+router.post(
+  "/tags",
+  authenticateToken,
+  tagValidationRules(),
+  handleValidationResult,
+  addTag
+);
+
+/**
+ * PUT /api/tags/:id
+ * edits a tag
+ */
 router.put(
   "/tags/:id",
   authenticateToken,
@@ -121,10 +132,16 @@ router.put(
 );
 
 /**
- * DELETE /api/tags/:id
- * deletes a tag
+ * PATCH /api/tags/:id
+ * deletes a tag by setting isDeleted to true
  */
-router.delete("/tags/:id", validateId(), handleValidationResult, deleteTag);
+router.patch(
+  "/tags/:id",
+  authenticateToken,
+  validateId(),
+  handleValidationResult,
+  deleteTag
+);
 
 // ------------------------------------------------- //
 // User routes //

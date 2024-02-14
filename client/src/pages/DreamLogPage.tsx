@@ -41,7 +41,8 @@ const DreamLogPage: React.FC = () => {
           },
         });
         if (response.status === 200) {
-          setTags(response.data as Tag[]);
+          const activeTags = response.data.filter((tag: Tag) => !tag.isDeleted);
+          setTags(activeTags);
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
