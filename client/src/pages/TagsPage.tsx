@@ -52,6 +52,7 @@ const TagsPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
+        navigate("/login");
         throw new Error("No token found"); // TODO: show error message as snackbar and redirect to login
       }
 
@@ -95,6 +96,7 @@ const TagsPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
+        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -137,6 +139,7 @@ const TagsPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
+        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -172,9 +175,7 @@ const TagsPage: React.FC = () => {
       <div
         className="container"
         style={{ maxWidth: "50%", marginTop: "1%", color: "#E9D5CA" }}>
-        <h2 className="mb-4 text-center">
-          Tags
-        </h2>
+        <h2 className="mb-4 text-center">Tags</h2>
         <div className="mb-4">
           {!isCreating ? (
             <Button

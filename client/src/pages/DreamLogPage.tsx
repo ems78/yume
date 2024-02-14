@@ -35,6 +35,11 @@ const DreamLogPage: React.FC = () => {
     const fetchTags = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          throw new Error("No token found");
+        }
+
         const response = await axios.get("http://localhost:8800/api/tags", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -54,13 +59,14 @@ const DreamLogPage: React.FC = () => {
     };
 
     fetchTags();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const fetchDreamLog = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
+          navigate("/login");
           throw new Error("No token found");
         }
 
@@ -91,7 +97,7 @@ const DreamLogPage: React.FC = () => {
     };
 
     fetchDreamLog();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const selectedTagObjects = tags.filter((tag) =>
@@ -182,6 +188,7 @@ const DreamLogPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
+        navigate("/login");
         throw new Error("No token found");
       }
 

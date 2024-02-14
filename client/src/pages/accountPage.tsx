@@ -19,7 +19,7 @@ const AccountPage = () => {
         if (!token) {
           // TODO: show error message as snackbar
           navigate("/login");
-          return;
+          throw new Error("No token found");
         }
 
         const response = await axios.get("http://localhost:8800/api/account", {
@@ -59,7 +59,8 @@ const AccountPage = () => {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      return;
+      navigate("/login");
+      throw new Error("No token found");
     }
 
     const response = await axios.put(
