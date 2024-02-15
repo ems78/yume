@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const AccountPage = () => {
   const navigate = useNavigate();
@@ -17,8 +18,6 @@ const AccountPage = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          // TODO: show error message as snackbar
-          navigate("/login");
           throw new Error("No token found");
         }
 
@@ -32,14 +31,23 @@ const AccountPage = () => {
           const user = response.data as User;
           setUser(user);
           setOriginalUserInfo(user);
-        } else {
-          // TODO: show error message as snackbar
-          navigate("/login");
         }
       } catch (error) {
-        // console.error("Error fetching user: ", error);
-        // TODO: show error message as snackbar
+        if (
+          (error as Error).message === "No token found" ||
+          (axios.isAxiosError(error) && error.response?.status === 401)
+        ) {
+          toast.error("Please login.");
+        } else if (
+          axios.isAxiosError(error) &&
+          error.response?.status === 404
+        ) {
+          toast.error("User not found");
+        } else {
+          toast.error("Error fetching user. Please login again.");
+        }
         navigate("/login");
+        // console.error("Error fetching user: ", error);
       }
     };
 
@@ -57,26 +65,37 @@ const AccountPage = () => {
       return;
     }
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      throw new Error("No token found");
-    }
-
-    const response = await axios.put(
-      "http://localhost:8800/api/account",
-      user,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
       }
-    );
 
-    console.log(response);
-    // TODO: show success/error message as snackbar
-    if (response.status === 200) {
-      setOriginalUserInfo(user);
+      const response = await axios.put(
+        "http://localhost:8800/api/account",
+        user,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success("User info updated successfully");
+      if (response.status === 200) {
+        setOriginalUserInfo(user);
+      }
+    } catch (error) {
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error updating user info.");
+      }
+      navigate("/login");
+      // console.error("Error updating user info: ", error);
     }
   };
 

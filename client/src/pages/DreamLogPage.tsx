@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const DreamLogPage: React.FC = () => {
   const navigate = useNavigate();
@@ -36,7 +37,6 @@ const DreamLogPage: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          navigate("/login");
           throw new Error("No token found");
         }
 
@@ -51,10 +51,18 @@ const DreamLogPage: React.FC = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          console.log("No tags found");
+          toast.error("No tags found");
           return;
+        } else if (
+          (error as Error).message === "No token found" ||
+          (axios.isAxiosError(error) && error.response?.status === 401)
+        ) {
+          toast.error("Please login.");
+        } else {
+          toast.error("Error fetching tags.");
         }
-        console.log("Error fetching tags: ", error); // TODO: show error message as snackbar
+        navigate("/login");
+        // console.log("Error fetching tags: ", error);
       }
     };
 
@@ -66,7 +74,6 @@ const DreamLogPage: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          navigate("/login");
           throw new Error("No token found");
         }
 
@@ -90,9 +97,17 @@ const DreamLogPage: React.FC = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          console.log("No log found");
-          return;
+          toast.error("Log not found");
+        } else if (
+          (error as Error).message === "No token found" ||
+          (axios.isAxiosError(error) && error.response?.status === 401)
+        ) {
+          toast.error("Please login.");
+        } else {
+          toast.error("Error fetching log.");
         }
+        navigate("/login");
+        // console.log("Error fetching log: ", error);
       }
     };
 
@@ -188,7 +203,6 @@ const DreamLogPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -208,10 +222,19 @@ const DreamLogPage: React.FC = () => {
       if (response.status === 200) {
         setOriginalDream(dream);
         setIsEditing(false);
-        console.log("Log updated"); // TODO: show snackbar message
+        toast.success("Log updated successfully");
       }
     } catch (error) {
-      console.log("Error updating log: ", error); // TODO: show snackbar message
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error updating log.");
+      }
+      navigate("/login");
+      // console.log("Error updating log: ", error);
     }
   };
 

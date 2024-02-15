@@ -2,10 +2,12 @@ import { NavLink } from "react-router-dom";
 import {
   BsJournalText,
   BsTags,
-  BsGearWideConnected,
+  // BsGearWideConnected,
   BsPerson,
 } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
@@ -44,14 +46,14 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                 <BsTags /> Tags
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink
                 to="/settings"
                 className="nav-link fs-5"
                 style={{ color: "#E9D5CA" }}>
                 <BsGearWideConnected /> Settings
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink
                 to="/account"
@@ -71,6 +73,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             height: "100vh",
           }}>
           {children}
+          <ToastContainer />
         </div>
       </div>
     </div>

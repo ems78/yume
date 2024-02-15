@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import DreamLogCreateForm from "../components/DreamLogCreateForm";
+import { toast } from "react-toastify";
 
 const JournalPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,8 +19,7 @@ const JournalPage: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          navigate("/login");
-          return;
+          throw new Error("No token found");
         }
 
         const response = await axios.get("http://localhost:8800/api/logs", {
@@ -38,11 +38,18 @@ const JournalPage: React.FC = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          // TODO: show snackbar message - no logs found
+          toast.error("No dream logs found");
+          return;
+        } else if (
+          (error as Error).message === "No token found" ||
+          (axios.isAxiosError(error) && error.response?.status === 401)
+        ) {
+          toast.error("Please login.");
         } else {
-          console.log("Error fetching dream logs: ", error);
-          navigate("/login");
+          toast.error("Error fetching dream logs.");
         }
+        navigate("/login");
+        // console.log("Error fetching dream logs: ", error);
       }
     };
 
@@ -60,7 +67,6 @@ const JournalPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -78,9 +84,19 @@ const JournalPage: React.FC = () => {
           (log) => log._id.toString() !== logId
         );
         setDreamLogs(updatedDreamLogs);
+        toast.success("Log deleted successfully");
       }
     } catch (error) {
-      console.log("Error deleting dream log: ", error);
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error deleting dream log.");
+      }
+      navigate("/login");
+      // console.log("Error deleting dream log: ", error);
     }
   };
 
@@ -88,7 +104,6 @@ const JournalPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -104,6 +119,7 @@ const JournalPage: React.FC = () => {
       if (response.status === 200) {
         const dreamLog = response.data as DreamLog;
         setDreamLogs((prevDreamLogs) => {
+          toast.success("Log created successfully");
           const updatedDreamLogs = [...prevDreamLogs, dreamLog];
           const sortedDreamLogs = updatedDreamLogs.slice().sort((a, b) => {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -112,7 +128,16 @@ const JournalPage: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log("Error fetching dream log: ", error);
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error fetching dream log.");
+      }
+      navigate("/login");
+      // console.log("Error fetching dream log: ", error);
     }
   };
 

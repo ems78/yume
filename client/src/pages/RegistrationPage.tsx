@@ -3,6 +3,7 @@ import Layout from "../App";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RegistrationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,8 +36,6 @@ const RegistrationPage: React.FC = () => {
   };
 
   const handleErrors = (error: Error) => {
-    // console.error("Error registering user: ", error);
-
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
 
@@ -82,7 +81,7 @@ const RegistrationPage: React.FC = () => {
         formData
       );
       if (response.status === 201) {
-        console.log("Registration successful"); // TODO: show success message as snackbar
+        toast.success("User registered successfully. Please log in.");
         navigate("/login");
       }
     } catch (error) {

@@ -5,6 +5,7 @@ import axios from "axios";
 import TagCard from "../components/TagCard";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const TagsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +20,7 @@ const TagsPage: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          navigate("/login");
-          return;
+          throw new Error("No token found");
         }
 
         const response = await axios.get("http://localhost:8800/api/tags", {
@@ -38,10 +38,17 @@ const TagsPage: React.FC = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          console.log("No tags found"); // TODO: show snackbar message
-          return;
+          toast.error("No tags found");
+        } else if (
+          (axios.isAxiosError(error) && error.response?.status === 401) ||
+          (error as Error).message === "No token found"
+        ) {
+          toast.error("Please login.");
+        } else {
+          toast.error("Error fetching tags.");
         }
-        console.log("Error fetching tags: ", error); // TODO: show error message as snackbar
+        navigate("/login");
+        // console.log("Error fetching tags: ", error);
       }
     };
 
@@ -52,8 +59,7 @@ const TagsPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
-        throw new Error("No token found"); // TODO: show error message as snackbar and redirect to login
+        throw new Error("No token found");
       }
 
       const response = await axios.put(
@@ -80,7 +86,16 @@ const TagsPage: React.FC = () => {
         );
       }
     } catch (error) {
-      console.log("Error updating tag: ", error); // TODO: show error message as snackbar
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error updating tag.");
+      }
+      navigate("/login");
+      // console.log("Error updating tag: ", error);
     }
   };
 
@@ -96,7 +111,6 @@ const TagsPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -117,10 +131,19 @@ const TagsPage: React.FC = () => {
             a.name.localeCompare(b.name)
           )
         );
-        console.log("Tag deleted"); // TODO: show snackbar message
+        toast.success("Tag deleted successfully");
       }
     } catch (error) {
-      console.log("Error deleting tag: ", error); // TODO: show error message as snackbar
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error deleting tag.");
+      }
+      navigate("/login");
+      // console.log("Error deleting tag: ", error);
     }
   };
 
@@ -139,7 +162,6 @@ const TagsPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        navigate("/login");
         throw new Error("No token found");
       }
 
@@ -163,10 +185,19 @@ const TagsPage: React.FC = () => {
         setTags(updatedTags.sort((a, b) => a.name.localeCompare(b.name)));
         setIsCreating(false);
         setNewTag("");
-        console.log("Tag saved"); // TODO: show snackbar message
+        toast.success("Tag added successfully");
       }
     } catch (error) {
-      console.log("Error saving tag: ", error); // TODO: show error message as snackbar
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error saving tag.");
+      }
+      navigate("/login");
+      // console.log("Error saving tag: ", error);
     }
   };
 
