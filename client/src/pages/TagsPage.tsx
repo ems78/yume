@@ -44,10 +44,10 @@ const TagsPage: React.FC = () => {
           (error as Error).message === "No token found"
         ) {
           toast.error("Please login.");
+          navigate("/login");
         } else {
           toast.error("Error fetching tags.");
         }
-        navigate("/login");
         // console.log("Error fetching tags: ", error);
       }
     };
@@ -91,10 +91,10 @@ const TagsPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error updating tag.");
       }
-      navigate("/login");
       // console.log("Error updating tag: ", error);
     }
   };
@@ -139,10 +139,10 @@ const TagsPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error deleting tag.");
       }
-      navigate("/login");
       // console.log("Error deleting tag: ", error);
     }
   };
@@ -193,10 +193,10 @@ const TagsPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error saving tag.");
       }
-      navigate("/login");
       // console.log("Error saving tag: ", error);
     }
   };
@@ -231,6 +231,7 @@ const TagsPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error fetching dream logs.");
       }

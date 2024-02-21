@@ -58,10 +58,10 @@ const DreamLogPage: React.FC = () => {
           (axios.isAxiosError(error) && error.response?.status === 401)
         ) {
           toast.error("Please login.");
+          navigate("/login");
         } else {
           toast.error("Error fetching tags.");
         }
-        navigate("/login");
         // console.log("Error fetching tags: ", error);
       }
     };
@@ -103,10 +103,10 @@ const DreamLogPage: React.FC = () => {
           (axios.isAxiosError(error) && error.response?.status === 401)
         ) {
           toast.error("Please login.");
+          navigate("/login");
         } else {
           toast.error("Error fetching log.");
         }
-        navigate("/login");
         // console.log("Error fetching log: ", error);
       }
     };
@@ -176,7 +176,7 @@ const DreamLogPage: React.FC = () => {
   };
 
   const handleBackClick = () => {
-    navigate("/journal");
+    navigate(-1);
   };
 
   const handleCancelClick = () => {
@@ -230,10 +230,10 @@ const DreamLogPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error updating log.");
       }
-      navigate("/login");
       // console.log("Error updating log: ", error);
     }
   };

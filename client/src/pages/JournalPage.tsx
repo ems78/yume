@@ -45,10 +45,10 @@ const JournalPage: React.FC = () => {
           (axios.isAxiosError(error) && error.response?.status === 401)
         ) {
           toast.error("Please login.");
+          navigate("/login");
         } else {
           toast.error("Error fetching dream logs.");
         }
-        navigate("/login");
         // console.log("Error fetching dream logs: ", error);
       }
     };
@@ -92,10 +92,10 @@ const JournalPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error deleting dream log.");
       }
-      navigate("/login");
       // console.log("Error deleting dream log: ", error);
     }
   };
@@ -133,10 +133,10 @@ const JournalPage: React.FC = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error fetching dream log.");
       }
-      navigate("/login");
       // console.log("Error fetching dream log: ", error);
     }
   };

@@ -38,6 +38,7 @@ const AccountPage = () => {
           (axios.isAxiosError(error) && error.response?.status === 401)
         ) {
           toast.error("Please login.");
+          navigate("/login");
         } else if (
           axios.isAxiosError(error) &&
           error.response?.status === 404
@@ -46,7 +47,6 @@ const AccountPage = () => {
         } else {
           toast.error("Error fetching user. Please login again.");
         }
-        navigate("/login");
         // console.error("Error fetching user: ", error);
       }
     };
@@ -91,10 +91,10 @@ const AccountPage = () => {
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error updating user info.");
       }
-      navigate("/login");
       // console.error("Error updating user info: ", error);
     }
   };

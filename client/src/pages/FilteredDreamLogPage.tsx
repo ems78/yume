@@ -62,10 +62,10 @@ const FilteredDreamLogPage: React.FC<FilteredDreamLogProps> = ({
         (axios.isAxiosError(error) && error.response?.status === 401)
       ) {
         toast.error("Please login.");
+        navigate("/login");
       } else {
         toast.error("Error deleting dream log.");
       }
-      navigate("/login");
       // console.log("Error deleting dream log: ", error);
     }
   };

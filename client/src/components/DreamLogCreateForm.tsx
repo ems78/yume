@@ -5,11 +5,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DreamLogFormProps, Tag } from "../../../app/interfaces";
 import { FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const DreamLogCreateForm: React.FC<DreamLogFormProps> = ({
   setIsCreating,
   addDreamLog,
 }) => {
+  const navigate = useNavigate();
+
   const [dream, setDream] = useState({
     title: "",
     content: "",
@@ -36,15 +40,22 @@ const DreamLogCreateForm: React.FC<DreamLogFormProps> = ({
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          console.log("No tags found");
+          toast.error("No tags found");
+          return;
+        } else if (
+          (axios.isAxiosError(error) && error.response?.status === 401) ||
+          (error as Error).message === "No token found"
+        ) {
+          toast.error("Please login.");
+          navigate("/login");
           return;
         }
-        console.log("Error fetching tags: ", error); // TODO: show error message as snackbar
+        // console.log("Error fetching tags: ", error);
       }
     };
 
     fetchTags();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const closeDropdown = (e: MouseEvent) => {
@@ -119,12 +130,20 @@ const DreamLogCreateForm: React.FC<DreamLogFormProps> = ({
       if (response.status === 201) {
         addDreamLog(response.data.insertedId);
         setIsCreating(false);
-        console.log("Dream log saved"); // TODO: show success message as snackbar
       }
     } catch (error) {
-      console.log("Error saving dream log: ", error); // TODO: show error message as snackbar
+      setSearchTerm("");
+      if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+        navigate("/login");
+        return;
+      } else {
+        toast.error("Error creating dream log.");
+      }
     }
-    setSearchTerm("");
   };
 
   return (
