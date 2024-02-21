@@ -201,6 +201,43 @@ const TagsPage: React.FC = () => {
     }
   };
 
+  const handleTagClick = async (tagId: string, tagName: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.get(
+        `http://localhost:8800/api/logs/tag/${tagId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        navigate("/logs/filtered", {
+          state: { logs: response.data, tagName: tagName },
+        });
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        toast.error("No dream logs with the tag found");
+        return;
+      } else if (
+        (error as Error).message === "No token found" ||
+        (axios.isAxiosError(error) && error.response?.status === 401)
+      ) {
+        toast.error("Please login.");
+      } else {
+        toast.error("Error fetching dream logs.");
+      }
+      // console.log("Error fetching dream logs: ", error);
+    }
+  };
+
   return (
     <Layout>
       <div
@@ -241,12 +278,15 @@ const TagsPage: React.FC = () => {
         <hr className="mb-4" style={{ backgroundColor: "white" }} />
         <div className="tags">
           {tags.map((tag) => (
-            <TagCard
+            <a
               key={tag._id.toString()}
-              tag={tag}
-              handleEditTag={handleEditTag}
-              handleDeleteTag={handleDeleteTag}
-            />
+              onClick={() => handleTagClick(tag._id.toString(), tag.name)}>
+              <TagCard
+                tag={tag}
+                handleEditTag={handleEditTag}
+                handleDeleteTag={handleDeleteTag}
+              />
+            </a>
           ))}
         </div>
       </div>

@@ -42,6 +42,27 @@ export const getLogById = async (req: Request, res: Response) => {
   }
 };
 
+export const getLogsWithTag = async (req: Request, res: Response) => {
+  try {
+    const userReq = req as RequestWithUser;
+    const userId = new ObjectId(userReq.user.userId);
+
+    const dreamLogsCollection = (req as any).collections.dreamLogs;
+    const dreamLogs: DreamLog[] = await dreamLogsCollection
+      .find({ userId: userId, tags: req.params.id })
+      .toArray();
+
+    if (dreamLogs.length === 0) {
+      return res.status(404).json({ message: "No logs found" });
+    }
+
+    res.status(200).json(dreamLogs);
+  } catch (error) {
+    console.error("Error fetching dream logs: ", error);
+    res.status(500).json({ message: "Error fetching logs" });
+  }
+};
+
 export const addLog = async (req: Request, res: Response) => {
   try {
     const userReq = req as RequestWithUser;

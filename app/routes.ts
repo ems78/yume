@@ -2,6 +2,7 @@ import express from "express";
 import {
   getLogs,
   getLogById,
+  getLogsWithTag,
   addLog,
   editLog,
   deleteLog,
@@ -49,6 +50,18 @@ router.get(
   validateId(),
   handleValidationResult,
   getLogById
+);
+
+/**
+ * GET /api/logs/tag/:tagId
+ * returns logs with a specific tag
+ */
+router.get(
+  "/logs/tag/:id",
+  authenticateToken,
+  validateId(),
+  handleValidationResult,
+  getLogsWithTag
 );
 
 /**

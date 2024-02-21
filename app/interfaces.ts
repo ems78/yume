@@ -34,6 +34,11 @@ interface DreamLogFormProps {
   addDreamLog: (logId: string) => void;
 }
 
+interface FilteredDreamLogProps {
+  logs: DreamLog[];
+  tagName: string;
+}
+
 interface User extends Document {
   _id: ObjectId;
   username: string;
@@ -52,4 +57,14 @@ interface RequestWithUser extends Request {
   user: TokenPayload;
 }
 
-export { Tag, TagProps, DreamLog, LogProps, DreamLogFormProps, User, TokenPayload, RequestWithUser };
+export {
+  Tag,
+  TagProps,
+  DreamLog,
+  LogProps,
+  DreamLogFormProps,
+  FilteredDreamLogProps,
+  User,
+  TokenPayload,
+  RequestWithUser,
+};
