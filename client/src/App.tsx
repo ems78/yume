@@ -19,12 +19,12 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           style={{ color: "#E9D5CA", top: 0, bottom: 0, overflowY: "auto" }}>
           {/* Logo */}
           <div className="text-center mb-4">
+            <h1 className="font-italic">Yume</h1>
             <img
-              src="/path/to/logo.png"
+              src="../public/batuso.jpeg"
               alt="Yume Logo"
-              style={{ maxWidth: "80%", height: "auto" }}
+              style={{ width: "100%", height: "auto" }}
             />
-            <h5 className="mb-5">Yume</h5>
           </div>
           {/* Nav buttons */}
           <nav

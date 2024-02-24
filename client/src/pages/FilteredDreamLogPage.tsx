@@ -14,7 +14,7 @@ const FilteredDreamLogPage: React.FC<FilteredDreamLogProps> = ({
   const location = useLocation();
 
   const [dreamLogs, setDreamLogs] = useState<DreamLog[]>(logs);
-  const [tag, setTag] = useState<string>("");
+  const [tag, setTag] = useState<string>(tagName);
 
   useEffect(() => {
     if (location.state && location.state.logs) {
@@ -26,7 +26,6 @@ const FilteredDreamLogPage: React.FC<FilteredDreamLogProps> = ({
   }, [location.state]);
 
   const handleDeleteClick = async (logId: string) => {
-    console.log(tagName);
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this log?"
     );
